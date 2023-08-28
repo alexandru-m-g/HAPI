@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "cweijan.vscode-postgresql-client2",
+        "mhutchie.git-graph"
+    ]
+}

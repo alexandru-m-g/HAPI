@@ -1,3 +1,4 @@
+
 version: "3.5"
 
 name: hapi
@@ -14,14 +15,18 @@ services:
       - ".ssh/etc:/etc/ssh"
       - ".ssh/authorized_keys/:/root/.ssh/authorized_keys"
       - "./..:/srv/hapi"
-    entrypoint: tail -f /dev/null
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+
+    entrypoint: sleep infinity
   db:
     image: postgis/postgis:15-3.4-alpine
     hostname: db
     ports:
       - "127.0.0.1:45432:5432"
     volumes:
-      - "${BASEDIR}/dbs/hapi-psql:/var/lib/pgsql"
+      - "${BASEDIR:-postgres-data}/dbs/hapi-psql:/var/lib/pgsql"
     environment:
       PGDATA: /var/lib/pgsql
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
