@@ -21,7 +21,7 @@ services:
     ports:
       - "127.0.0.1:45432:5432"
     volumes:
-      - "${BASEDIR}/dbs/hapi-psql:/var/lib/pgsql"
+      - "${BASEDIR:-./postgres-data}/dbs/hapi-psql:/var/lib/pgsql"
     environment:
       PGDATA: /var/lib/pgsql
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
