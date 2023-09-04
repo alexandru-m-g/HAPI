@@ -15,3 +15,7 @@ class OperationalPresencePydantic(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class HTTP409Message(BaseModel):
+    detail: str

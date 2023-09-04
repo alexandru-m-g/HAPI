@@ -1,13 +1,15 @@
 import asyncio
 
+from datetime import datetime
+
 from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from orm_models import Base, OperationalPresence1
-
+from orm_models import Base, OperationalPresence
 
 # Create an AsyncEngine
-engine = create_async_engine("postgresql+asyncpg://hapi:hapi@localhost:45432/hapi", echo=True)
+engine = create_async_engine(
+    "postgresql+asyncpg://hapi:hapi@localhost:45432/hapi", echo=True, pool_size=10)
 
 # Create a custom Session class
 AsyncSessionLocal = sessionmaker(
@@ -16,6 +18,7 @@ AsyncSessionLocal = sessionmaker(
     class_=AsyncSession,
     future=True
 )
+
 
 async def get_db() -> AsyncSession:
     session = AsyncSessionLocal()
@@ -30,29 +33,31 @@ async def init_db():
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
+
 async def populate_db():
     # Create and use a session
     async with AsyncSessionLocal() as session:  # Automatically begin a new Transaction
         async with session.begin():  # Actually start the Transaction
-            op1 = OperationalPresence1(
+            op1 = OperationalPresence(
                 resource_ref=1,
                 org_ref=2,
                 sector_code="Health",
                 admin2_ref=3,
-                # reference_period_start=datetime.now(),
+                reference_period_start=datetime.now(),
                 # source_data="Sample data"
             )
-            op2 = OperationalPresence1(
+            op2 = OperationalPresence(
                 resource_ref=1,
                 org_ref=3,
                 sector_code="Water",
                 admin2_ref=4,
-                # reference_period_start=datetime.now(),
+                reference_period_start=datetime.now(),
                 source_data="Sample data"
             )
             session.add_all([op1, op2])
 
         await session.commit()
+
 
 async def run():
     await init_db()
