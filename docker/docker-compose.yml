@@ -24,4 +24,4 @@ services:
       - "${BASEDIR:-./postgres-data}/dbs/hapi-psql:/var/lib/pgsql"
     environment:
       PGDATA: /var/lib/pgsql
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}

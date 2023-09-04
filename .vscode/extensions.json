@@ -1,6 +1,8 @@
 {
     "recommendations": [
         "mhutchie.git-graph",
-        "ms-python.python"
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "ms-python.black-formatter"
     ]
 }
